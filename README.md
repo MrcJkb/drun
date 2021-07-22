@@ -1,6 +1,6 @@
 # drun
-[WIP] Fork of https://sourceforge.net/p/drun
+Fork of https://sourceforge.net/p/drun
 
 ---
 ### Goals:
-- [ ] Upgrade to ruby-gtk3
+- [x] Upgrade to ruby-gtk3
