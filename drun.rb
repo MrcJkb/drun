@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-require 'gtk2'
+require 'gtk3'
 require 'fileutils'
 
 Windows = (ENV['OS'] =~ /Windows/)
@@ -649,7 +649,7 @@ end
 # A scrollable completion list window that calls various blocks on different events
 class CompletionWindow < Gtk::Window
 	def initialize(parent)
-		super(Gtk::Window::POPUP)
+		super(:popup)
 
 		@parent = parent
 		
@@ -663,7 +663,7 @@ class CompletionWindow < Gtk::Window
 
 		@scroll = Gtk::ScrolledWindow.new
 		@scroll.add(@treeview)
-		@scroll.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC)
+		@scroll.set_policy(:automatic, :automatic)
 		set_transient_for(parent)
 		set_default_size(490, 200)
 		set_accept_focus(false)
@@ -700,18 +700,18 @@ class CompletionWindow < Gtk::Window
 
 	# Call to handle a gtk key press event
 	def keyPressEvent(event)
-		down = event.keyval == Gdk::Keyval::GDK_KEY_Down
-		down ||= event.keyval == Gdk::Keyval::GDK_KEY_Tab
-		up = event.keyval == Gdk::Keyval::GDK_KEY_Up
-		del = event.keyval == Gdk::Keyval::GDK_KEY_Delete
-		pagedown = event.keyval == Gdk::Keyval::GDK_KEY_Page_Down
-		pageup = event.keyval == Gdk::Keyval::GDK_KEY_Page_Up
+		down = event.keyval == Gdk::Keyval::KEY_Down
+		down ||= event.keyval == Gdk::Keyval::KEY_Tab
+		up = event.keyval == Gdk::Keyval::KEY_Up
+		del = event.keyval == Gdk::Keyval::KEY_Delete
+		pagedown = event.keyval == Gdk::Keyval::KEY_Page_Down
+		pageup = event.keyval == Gdk::Keyval::KEY_Page_Up
 
-		ret = event.keyval == Gdk::Keyval::GDK_KEY_Return
-		control = ((event.state & Gdk::Window::CONTROL_MASK) == Gdk::Window::CONTROL_MASK)
-		shift = ((event.state & Gdk::Window::SHIFT_MASK) == Gdk::Window::SHIFT_MASK)
+		ret = event.keyval == Gdk::Keyval::KEY_Return
+		control = ((event.state & Gdk::ModifierType::CONTROL_MASK) == Gdk::ModifierType::CONTROL_MASK)
+		shift = ((event.state & Gdk::ModifierType::SHIFT_MASK) == Gdk::ModifierType::SHIFT_MASK)
 
-		up ||= (shift and event.keyval == Gdk::Keyval::GDK_KEY_ISO_Left_Tab)
+		up ||= (shift and event.keyval == Gdk::Keyval::KEY_ISO_Left_Tab)
 
 		if ret
 			dismissCompletion
@@ -737,12 +737,12 @@ class CompletionWindow < Gtk::Window
 			end
 			changeCompletion
 			true
-		elsif (event.keyval == Gdk::Keyval::GDK_KEY_Shift_L) or (event.keyval == Gdk::Keyval::GDK_KEY_Shift_R)
+		elsif (event.keyval == Gdk::Keyval::KEY_Shift_L) or (event.keyval == Gdk::Keyval::KEY_Shift_R)
 		elsif visible?
 			# Any unhandled keypress dismisses the completion
 			dismissCompletion
 			# Don't pass escape event to parent
-			return (event.keyval == Gdk::Keyval::GDK_KEY_Escape)
+			return (event.keyval == Gdk::Keyval::KEY_Escape)
 		end
 	end
 
@@ -841,16 +841,16 @@ class CompletionEntry < Gtk::Entry
 		}
 
 		self.signal_connect('key_press_event') { |widget, event|
-			slash = (event.keyval == Gdk::Keyval::GDK_KEY_slash)
-			escape = (event.keyval == Gdk::Keyval::GDK_KEY_Escape)
-			slash ||= (event.keyval == Gdk::Keyval::GDK_KEY_backslash)
+			slash = (event.keyval == Gdk::Keyval::KEY_slash)
+			escape = (event.keyval == Gdk::Keyval::KEY_Escape)
+			slash ||= (event.keyval == Gdk::Keyval::KEY_backslash)
 
 			if enablereversesearch
-				control = ((event.state & Gdk::Window::CONTROL_MASK) == Gdk::Window::CONTROL_MASK)
-				r = (event.keyval == Gdk::Keyval::GDK_KEY_r)
-				tab = (event.keyval == Gdk::Keyval::GDK_KEY_Tab)
-				ret = (event.keyval == Gdk::Keyval::GDK_KEY_Return)
-				shift = ((event.state & Gdk::Window::SHIFT_MASK) == Gdk::Window::SHIFT_MASK)
+				control = ((event.state & Gdk::ModifierType::CONTROL_MASK) == Gdk::ModifierType::CONTROL_MASK)
+				r = (event.keyval == Gdk::Keyval::KEY_r)
+				tab = (event.keyval == Gdk::Keyval::KEY_Tab)
+				ret = (event.keyval == Gdk::Keyval::KEY_Return)
+				shift = ((event.state & Gdk::ModifierType::SHIFT_MASK) == Gdk::ModifierType::SHIFT_MASK)
 
 				if tab or ret
 					@reversesearch = nil
@@ -883,15 +883,15 @@ class CompletionEntry < Gtk::Entry
 
 					if Gdk::Keyval.to_unicode(event.keyval) > 0
 						@reversesearchtext += GLib::UniChar.to_utf8(event.keyval)
-					elsif event.keyval == Gdk::Keyval::GDK_KEY_BackSpace
+					elsif event.keyval == Gdk::Keyval::KEY_BackSpace
 						@reversesearchtext = @reversesearchtext[0..-2]
 					elsif escape or
-						event.keyval == Gdk::Keyval::GDK_KEY_Left or
-						event.keyval == Gdk::Keyval::GDK_KEY_Right or
-						event.keyval == Gdk::Keyval::GDK_KEY_Up or
-						event.keyval == Gdk::Keyval::GDK_KEY_Down or
-						event.keyval == Gdk::Keyval::GDK_KEY_Home or
-						event.keyval == Gdk::Keyval::GDK_KEY_End
+						event.keyval == Gdk::Keyval::KEY_Left or
+						event.keyval == Gdk::Keyval::KEY_Right or
+						event.keyval == Gdk::Keyval::KEY_Up or
+						event.keyval == Gdk::Keyval::KEY_Down or
+						event.keyval == Gdk::Keyval::KEY_Home or
+						event.keyval == Gdk::Keyval::KEY_End
 
 						@reversesearch = nil
 						@reversesearchendblock.call
@@ -969,15 +969,14 @@ class Window
 
 		@completedtext = nil
 
-		@window.set_type_hint(Gdk::Window::TYPE_HINT_DIALOG)
-		@window.set_window_position(Gtk::Window::POS_CENTER_ALWAYS)
+		@window.set_window_position(Gtk::WindowPosition::CENTER_ALWAYS)
 
 		@window.set_border_width(4)
 		@window.signal_connect('destroy') { Gtk.main_quit }
 		@window.set_default_size(500, 50)
 		@window.set_title('Run')
 
-		vbox = Gtk::VBox.new(false, 1)
+		vbox = Gtk::Box.new(:vertical, 1)
 
 		@runProgramLabel = Gtk::Label.new('  Run Program:')
 		@runProgramLabel.set_alignment(0, 0)
@@ -986,14 +985,14 @@ class Window
 
 		@notFoundLabel.use_markup = true
 
-		hbox = Gtk::HBox.new(false, 1)
+		hbox = Gtk::Box.new(:horizontal, 1)
 
-		hbox.pack_start(@runProgramLabel, true, true)
-		hbox.pack_start(@notFoundLabel, true, true)
-		vbox.pack_start(hbox, false, false)
+		hbox.pack_start(@runProgramLabel, :expand => true, :fill => true, :padding => 0)
+		hbox.pack_start(@notFoundLabel, :expand => true, :fill => true, :padding => 0)
+		vbox.pack_start(hbox, :expand => false, :fill => false)
 
 		@textentry = CompletionEntry.new(@window)
-		vbox.pack_start(@textentry, true, true)
+		vbox.pack_start(@textentry, :expand => true, :fill => true)
 
 		@window.add(vbox)
 
@@ -1030,9 +1029,9 @@ class Window
 		@textentry.setDeletionBlock() { |text| @history.delete(text) }
 
 		@textentry.setKeyPressBlock() { |event|
-			up = event.keyval == Gdk::Keyval::GDK_KEY_Up
-			down = event.keyval == Gdk::Keyval::GDK_KEY_Down
-			alt = ((event.state & Gdk::Window::MOD1_MASK) == Gdk::Window::MOD1_MASK)
+			up = event.keyval == Gdk::Keyval::KEY_Up
+			down = event.keyval == Gdk::Keyval::KEY_Down
+			alt = ((event.state & Gdk::ModifierType::MOD1_MASK) == Gdk::ModifierType::MOD1_MASK)
 
 			handled = false
 
