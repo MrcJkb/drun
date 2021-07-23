@@ -1,4 +1,4 @@
-# drun-gtk3
+# drun3
 Fork of [drun](https://sourceforge.net/p/drun) with gtk3 support.
 
 Features
