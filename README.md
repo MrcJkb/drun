@@ -16,6 +16,14 @@ Features
 Installing
 ----------
 
+### Arch Linux
+
+Install from AUR, e.g.
+```
+paru drun3
+```
+### Manual
+
 Requirements:
 
 * ruby
