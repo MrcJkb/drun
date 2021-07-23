@@ -1,26 +1,26 @@
-# drun
+# drun-gtk3
 Fork of [drun](https://sourceforge.net/p/drun) with gtk3 support.
 
 Features
 --------
 
-  * Tab completion
-	* History
-	* Runs files, directories, urls, and executables
-	* Runs on thunar/nautilus file and directory selections
-	* Spelling correction
-	* Recursive directory completion
-	* Completions ordered using history
-	* Completes parameters from history
+* Tab completion
+* History
+* Runs files, directories, urls, and executables
+* Runs on thunar/nautilus file and directory selections
+* Spelling correction
+* Recursive directory completion
+* Completions ordered using history
+* Completes parameters from history
 
 Installing
 ----------
 
 Requirements:
 
-  * ruby
-	* ruby-gtk3
-	* gtk+
+* ruby
+* ruby-gtk3
+* gtk+
 
 Download and extract the latest archive from the [Releases](https://github.com/MrcJkb/drun/releases) page. Copy drun to somewhere in the system
 path such as /usr/local/bin. It can then be run by executing 'drun'.
@@ -79,8 +79,10 @@ Windows Support
 > The tutorial below is from the original drun project's README and may not work with ruby-gtk3.
 
 First, install the dependencies:
-	* Ruby
-	* Ruby-gkt3
+
+* Ruby
+* Ruby-gkt3
+
 Then the ruby program can be run by opening it with "Ruby interpreter (GUI)".
 
 Shortcuts in the quick launch toolbar can be opened with Win+1, Win+2, etc.
